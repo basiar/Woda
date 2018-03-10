@@ -10,7 +10,9 @@ import java.io.Serializable;
 
 public class Main2Activity extends AppCompatActivity {
 
+    TextView textView;
     TextView textView1;
+    TextView textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +21,16 @@ public class Main2Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         DaneUzytkownika daneUzytkownika = (DaneUzytkownika) intent.getSerializableExtra("dane");
-        Log.v("waga", String.valueOf(daneUzytkownika.getWaga()));
-        Log.v("wiek", String.valueOf(13));
+
+        textView = (TextView)findViewById(R.id.textView);
+        textView.setText(String.valueOf("Wiek:  "+ DaneUzytkownika.wiek));
 
         textView1 = (TextView)findViewById(R.id.textView1);
-        textView1.setText(String.valueOf(daneUzytkownika.getWaga())+" "+ String.valueOf(daneUzytkownika.getWiek()));
+        textView1.setText(String.valueOf("Waga: "+DaneUzytkownika.waga));
+
+        textView2 = (TextView)findViewById(R.id.textView2);
+        textView2.setText(String.valueOf("Płeć: "+DaneUzytkownika.plec));
+
 
     }
 }

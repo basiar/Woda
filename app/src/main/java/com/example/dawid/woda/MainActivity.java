@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity {
 
-    DaneUzytkownika daneUzytkownika = new DaneUzytkownika();
+    DaneUzytkownika daneUzytkownika;
 
     Spinner spinner_plec;
     ArrayAdapter<CharSequence> adapter_plec;
@@ -50,22 +50,20 @@ public class MainActivity extends AppCompatActivity {
         wiek_pole = (EditText)findViewById(R.id.wiek_pole);
         waga_pole = (EditText)findViewById(R.id.waga_pole);
 
-        wiek_pole.setText("12");
-        waga_pole.setText("23");
-        
+        wiek_pole.setText(String.valueOf(DaneUzytkownika.wiek));
+        waga_pole.setText(String.valueOf(DaneUzytkownika.waga));
+
         dalej = (Button)findViewById(R.id.dalej);
         dalej.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                daneUzytkownika.setPlec(plec_wybor);
-                daneUzytkownika.setWiek(Integer.parseInt(wiek_pole.getText().toString()));
-                daneUzytkownika.setWaga(Integer.parseInt(waga_pole.getText().toString()));
+                DaneUzytkownika.wiek = Integer.parseInt(wiek_pole.getText().toString());
+                DaneUzytkownika.waga = Integer.parseInt(waga_pole.getText().toString());
+                DaneUzytkownika.plec = plec_wybor;
 
-                Intent intent = new Intent(MainActivity.this,Main2Activity.class);
-                intent.putExtra("dane",daneUzytkownika);
+                Intent intent = new Intent(MainActivity.this,MainPage.class);
                 startActivity(intent);
-                //startActivity(new Intent().putExtra("daneUzytkownika", (Serializable) daneUzytkownika));
             }
         });
     }

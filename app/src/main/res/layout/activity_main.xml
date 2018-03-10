@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
-        android:text="Uzupełnij dane:"
+        android:text="Twoje dane"
         android:textColor="@color/kolor_zielony"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
