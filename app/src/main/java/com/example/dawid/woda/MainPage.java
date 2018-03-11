@@ -13,6 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,6 +52,21 @@ public class MainPage extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+       //ArrayAdapter<String> status_adapter = new ArrayAdapter<String>(this, R.layout.items2, R.id.status ,Tips.porady);
+       //ListView listView = (ListView) findViewById(R.id.dzienne_ListView);
+       //listView.setAdapter(status_adapter);
+
+        ArrayAdapter<String> porady_adapter = new ArrayAdapter<String>(this, R.layout.items, R.id.porada ,Tips.porady);
+        ListView listView2 = (ListView) findViewById(R.id.porady_ListView);
+        listView2.setAdapter(porady_adapter);
+
+
+        TextView data;
+        data = (TextView) findViewById(R.id.data);
+        DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
+        Date date = new Date();
+        data.setText(dateFormat.format(date));
     }
 
     @Override
@@ -90,6 +114,7 @@ public class MainPage extends AppCompatActivity
         } else if (id == R.id.statystyki) {
             Intent intent = new Intent(MainPage.this,Main2Activity.class);
             startActivity(intent);
+
         } else if (id == R.id.kalendarz) {
 
         } else if (id == R.id.nav_share) {
