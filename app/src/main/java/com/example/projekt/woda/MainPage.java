@@ -1,4 +1,4 @@
-package com.example.dawid.woda;
+package com.example.projekt.woda;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.example.dawid.woda;
+package com.example.projekt.woda;
 
 /**
  * Created by Dawid on 11.03.2018.

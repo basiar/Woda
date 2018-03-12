@@ -1,4 +1,4 @@
-package com.example.dawid.woda;
+package com.example.projekt.woda;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

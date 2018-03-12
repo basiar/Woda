@@ -1,4 +1,4 @@
-package com.example.dawid.woda;
+package com.example.projekt.woda;
 
 import java.io.Serializable;
 

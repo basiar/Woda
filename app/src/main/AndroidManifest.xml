@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dawid.woda">
+    package="com.example.projekt.woda">
 
     <application
         android:allowBackup="true"
@@ -9,11 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.projekt.woda.MainActivity">
         </activity>
-        <activity android:name=".Main2Activity" />
+        <activity android:name="com.example.projekt.woda.Main2Activity" />
         <activity
-            android:name=".MainPage"
+            android:name="com.example.projekt.woda.MainPage"
             android:label="@string/title_activity_main_page"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

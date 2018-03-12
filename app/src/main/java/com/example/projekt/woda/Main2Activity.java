@@ -1,4 +1,4 @@
-package com.example.dawid.woda;
+package com.example.projekt.woda;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
