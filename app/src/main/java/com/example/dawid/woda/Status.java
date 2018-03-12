@@ -5,6 +5,6 @@ package com.example.dawid.woda;
  */
 
 public class Status {
-    public static int nawodnienieProcenty = 50;
-    public static String napoj = "Woda";
+    public static int hydrationPercent = 50;
+    public static String drink = "Woda";
 }

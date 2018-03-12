@@ -9,7 +9,7 @@
     tools:showIn="@layout/app_bar_main_page">
 
     <TextView
-        android:id="@+id/data"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
-        android:id="@+id/dzienne_ListView"
+        android:id="@+id/status_ListView"
         android:layout_width="296dp"
         android:layout_height="138dp"
         android:layout_marginBottom="4dp"
@@ -32,13 +32,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/data"
+        app:layout_constraintTop_toBottomOf="@+id/date"
         app:layout_constraintVertical_bias="0.254" />
 
     <ListView
-        android:id="@+id/porady_ListView"
+        android:id="@+id/tips_ListView"
         android:layout_width="296dp"
         android:layout_height="138dp"
+        android:layout_margin="10dp"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -46,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/data"
+        app:layout_constraintTop_toBottomOf="@+id/date"
         app:layout_constraintVertical_bias="0.863" />
 
 </android.support.constraint.ConstraintLayout>

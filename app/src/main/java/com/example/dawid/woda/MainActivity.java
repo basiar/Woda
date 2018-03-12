@@ -3,9 +3,7 @@ package com.example.dawid.woda;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,54 +11,49 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.Serializable;
-
 public class MainActivity extends AppCompatActivity {
 
-    DaneUzytkownika daneUzytkownika;
+    Spinner spinner_gender;
+    ArrayAdapter<CharSequence> adapter_gender;
+    String gender_choice;
 
-    Spinner spinner_plec;
-    ArrayAdapter<CharSequence> adapter_plec;
-    String plec_wybor;
-
-    EditText wiek_pole;
-    EditText waga_pole;
-
-    Button dalej;
+    EditText age_field;
+    EditText weight_field;
+    Button ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        spinner_plec = (Spinner) findViewById(R.id.plec_wybor);
-        adapter_plec = ArrayAdapter.createFromResource(this,R.array.plec_lista, android.R.layout.simple_spinner_item);
-        adapter_plec .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_plec.setAdapter(adapter_plec);
-        spinner_plec.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner_gender = (Spinner) findViewById(R.id.gender_choice);
+        adapter_gender = ArrayAdapter.createFromResource(this,R.array.gender_list, android.R.layout.simple_spinner_item);
+        adapter_gender .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_gender.setAdapter(adapter_gender);
+        spinner_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                plec_wybor = adapterView.getSelectedItem().toString();
-                Toast.makeText(adapterView.getContext(),plec_wybor,Toast.LENGTH_SHORT).show();
+                gender_choice = adapterView.getSelectedItem().toString();
+                Toast.makeText(adapterView.getContext(),gender_choice,Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
-        wiek_pole = (EditText)findViewById(R.id.wiek_pole);
-        waga_pole = (EditText)findViewById(R.id.waga_pole);
+        age_field = (EditText)findViewById(R.id.age_field);
+        weight_field = (EditText)findViewById(R.id.weight_field);
 
-        wiek_pole.setText(String.valueOf(DaneUzytkownika.wiek));
-        waga_pole.setText(String.valueOf(DaneUzytkownika.waga));
+        age_field.setText(String.valueOf(User.age));
+        weight_field.setText(String.valueOf(User.weight));
 
-        dalej = (Button)findViewById(R.id.dalej);
-        dalej.setOnClickListener(new View.OnClickListener() {
+        ok = (Button)findViewById(R.id.ok);
+        ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                DaneUzytkownika.wiek = Integer.parseInt(wiek_pole.getText().toString());
-                DaneUzytkownika.waga = Integer.parseInt(waga_pole.getText().toString());
-                DaneUzytkownika.plec = plec_wybor;
+                User.age = Integer.parseInt(weight_field.getText().toString());
+                User.weight = Integer.parseInt(weight_field.getText().toString());
+                User.gender = gender_choice;
 
                 Intent intent = new Intent(MainActivity.this,MainPage.class);
                 startActivity(intent);

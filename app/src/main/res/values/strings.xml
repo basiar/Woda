@@ -2,17 +2,11 @@
 <resources>
     <string name="app_name">Woda</string>
 
-    <string-array name="plec_lista">
+    <string-array name="gender_list">
         <item>Mężczyzna</item>
         <item>Kobieta</item>
     </string-array>
 
-    <string-array name="wiek_lista">
-        <item>1-6 lat</item>
-        <item>7-10 lat</item>
-        <item>11-18 lat</item>
-        <item>Dorosły</item>
-    </string-array>
     <string name="title_activity_main_page">MainPage</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
