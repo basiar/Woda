@@ -54,17 +54,15 @@ public class MainPage extends AppCompatActivity
         String[] drinks = {"Coffe","Juice","Water"};
         String[] desc = {"Filiżanka kawy","Szklanka Soku","Szklanka Wody"};
         Integer[] img = {R.drawable.coffe,R.drawable.juice,R.drawable.water};
-        Integer[] proc = {43,54,88};
+        Integer[] proc = {25,54,80};
 
         ListView listView = (ListView) findViewById(R.id.status_ListView);
         StatusListView statusListView = new StatusListView(this,drinks,desc,img,proc);
         listView.setAdapter(statusListView);
 
-
         ArrayAdapter<String> porady_adapter = new ArrayAdapter<String>(this, R.layout.items, R.id.tip ,Tips.advice);
         ListView listView2 = (ListView) findViewById(R.id.tips_ListView);
         listView2.setAdapter(porady_adapter);
-
 
         TextView date1;
         date1 = (TextView) findViewById(R.id.date);

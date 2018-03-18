@@ -16,10 +16,6 @@ import android.widget.TextView;
 public class StatusListView extends ArrayAdapter<String>{
 
     private Activity context;
-   /* private String coffe = "Kawa";
-    private String description = "Kawa jest zajebista";
-    private Integer progres = 30;
-    private Integer image = R.drawable.coffe;*/
     private String[] drinks;
     private String[] desc;
     private Integer[] img;
