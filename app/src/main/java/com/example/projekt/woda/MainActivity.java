@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                User.age = Integer.parseInt(weight_field.getText().toString());
+                User.age = Integer.parseInt(age_field.getText().toString());
                 User.weight = Integer.parseInt(weight_field.getText().toString());
                 User.gender = gender_choice;
 

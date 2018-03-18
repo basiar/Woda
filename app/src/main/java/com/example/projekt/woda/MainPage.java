@@ -51,9 +51,15 @@ public class MainPage extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       //ArrayAdapter<String> status_adapter = new ArrayAdapter<String>(this, R.layout.items2, R.id.status ,Tips.porady);
-       //ListView listView = (ListView) findViewById(R.id.dzienne_ListView);
-       //listView.setAdapter(status_adapter);
+        String[] drinks = {"Coffe","Juice","Water"};
+        String[] desc = {"Filiżanka kawy","Szklanka Soku","Szklanka Wody"};
+        Integer[] img = {R.drawable.coffe,R.drawable.juice,R.drawable.water};
+        Integer[] proc = {43,54,88};
+
+        ListView listView = (ListView) findViewById(R.id.status_ListView);
+        StatusListView statusListView = new StatusListView(this,drinks,desc,img,proc);
+        listView.setAdapter(statusListView);
+
 
         ArrayAdapter<String> porady_adapter = new ArrayAdapter<String>(this, R.layout.items, R.id.tip ,Tips.advice);
         ListView listView2 = (ListView) findViewById(R.id.tips_ListView);
