@@ -16,54 +16,58 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainPage extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+public class MainPage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+{
     User user = new User();
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
+        User u=new User();
         String[] drinks = {"Coffe","Juice","Water"};
         String[] desc = {"Filiżanka kawy","Szklanka Soku","Szklanka Wody"};
         Integer[] img = {R.drawable.coffe,R.drawable.juice,R.drawable.water};
         Integer[] proc = {25,54,80};
 
+        //Dodawanie nowego napoju
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        //Rozwijanie/zwijanie menu
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //Wyswietlenie listy wypitych napojow
         ListView listView = (ListView) findViewById(R.id.status_ListView);
         StatusListView statusListView = new StatusListView(this,drinks,desc,img,proc);
         listView.setAdapter(statusListView);
 
+        //Wyswietlanie porad
         ArrayAdapter<String> porady_adapter = new ArrayAdapter<String>(this, R.layout.items, R.id.tip ,Tips.advice);
         ListView listView2 = (ListView) findViewById(R.id.tips_ListView);
         listView2.setAdapter(porady_adapter);
 
+        //Wyswietlanie daty na gorze ekranu
         TextView date1;
         date1 = (TextView) findViewById(R.id.date);
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
@@ -72,59 +76,67 @@ public class MainPage extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else
+        {
             super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_page, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item)
+    {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.date) {
-            Intent intent = new Intent(MainPage.this,MainActivity.class);
+        if (id == R.id.date)
+        {
+            Intent intent = new Intent(MainPage.this,GetUserData.class);
             startActivity(intent);
-
-        } else if (id == R.id.statistic) {
-            Intent intent = new Intent(MainPage.this,Main2Activity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.calendar) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
-
+        else if (id == R.id.statistic)
+        {
+            Intent intent = new Intent(MainPage.this,Stats.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.calendar)
+        {
+        }
+        else if (id == R.id.nav_share)
+        {
+        }
+        else if (id == R.id.nav_send)
+        {
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
