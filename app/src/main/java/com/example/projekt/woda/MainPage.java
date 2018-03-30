@@ -128,6 +128,8 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         }
         else if (id == R.id.calendar)
         {
+            Intent intent = new Intent(MainPage.this,Calendar.class);
+            startActivity(intent);
         }
         else if (id == R.id.nav_share)
         {

@@ -40,7 +40,7 @@ public class DataBase extends SQLiteOpenHelper
     {
         db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL);"); //, "+COL10+" TEXT NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME2+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" TEXT NOT NULL, "+COL8+" INTEGER NOT NULL, "+COL9+" INTEGER NOT NULL);");
-        db.execSQL(" CREATE TABLE "+TABLE_NAME3+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME3+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL3+" INTEGER NOT NULL);");
     }
 
     @Override
@@ -74,15 +74,15 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public boolean insert_Weight(int weight)
+    public boolean insert_Weight()
     {
         long result;
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues con=new ContentValues();
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
         Date date = new Date();
-        con.put(COL7,(dateFormat.format(date)));
-        con.put(COL3, weight);
+        con.put(COL7, date.getTime());//(dateFormat.format(date)));
+        con.put(COL3, User.getWeight());
         result=db.insert(TABLE_NAME3, null, con);
         if(result==-1)
         {
@@ -119,6 +119,12 @@ public class DataBase extends SQLiteOpenHelper
     public Cursor getUserData(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cur = db.rawQuery("select * from "+TABLE_NAME1,null);
+        return cur;
+    }
+
+    public Cursor getWeightData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cur = db.rawQuery("select * from "+TABLE_NAME3,null);
         return cur;
     }
 

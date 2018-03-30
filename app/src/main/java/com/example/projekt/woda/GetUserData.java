@@ -86,6 +86,9 @@ public class GetUserData extends AppCompatActivity {
                 User.setActivity(activity_choice);
                 boolean b = GlobalDataBase.getDb().insert_UserData();
                 Log.v("b:", String.valueOf(b));
+                boolean bb = GlobalDataBase.getDb().insert_Weight();
+                Log.v("bb:", String.valueOf(bb));
+
                 Intent intent = new Intent(GetUserData.this,MainPage.class);
                 startActivity(intent);
             }
