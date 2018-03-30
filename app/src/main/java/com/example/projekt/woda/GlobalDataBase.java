@@ -3,6 +3,7 @@ package com.example.projekt.woda;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Created by Basia on 24.03.2018.
@@ -11,15 +12,13 @@ import android.content.Context;
 //do udostepnienia obslugi bazy danych wszystkim activities
 public class GlobalDataBase extends Application
 {
-    private DataBase db;
+    private static DataBase db;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        db=new DataBase(getApplicationContext());
+    GlobalDataBase(Context context){
+        db = new DataBase(context);
     }
 
-    public DataBase getDb()
+    public static DataBase getDb()
     {
         return db;
     }

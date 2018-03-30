@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name="com.example.projekt.woda.GetUserData">
         </activity>
-        <activity android:name="com.example.projekt.woda.Stats" />
+        <activity android:name="com.example.projekt.woda.Statistics" />
         <activity
             android:name="com.example.projekt.woda.MainPage"
             android:label="@string/title_activity_main_page"

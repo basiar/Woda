@@ -23,6 +23,8 @@ import java.util.Date;
 public class MainPage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     User user = new User();
+    GlobalDataBase globalDataBase = new GlobalDataBase(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -30,7 +32,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         setContentView(R.layout.activity_main_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        User u=new User();
+        User u = new User();
         String[] drinks = {"Coffe","Juice","Water"};
         String[] desc = {"Filiżanka kawy","Szklanka Soku","Szklanka Wody"};
         Integer[] img = {R.drawable.coffe,R.drawable.juice,R.drawable.water};
@@ -38,11 +40,9 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
 
         //Dodawanie nowego napoju
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -79,12 +79,10 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     public void onBackPressed()
     {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        else
-        {
+        else {
             super.onBackPressed();
         }
     }
@@ -125,7 +123,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         }
         else if (id == R.id.statistic)
         {
-            Intent intent = new Intent(MainPage.this,Stats.class);
+            Intent intent = new Intent(MainPage.this,Statistics.class);
             startActivity(intent);
         }
         else if (id == R.id.calendar)

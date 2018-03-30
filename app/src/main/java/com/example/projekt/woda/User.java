@@ -10,11 +10,11 @@ import java.io.Serializable;
 public class User extends Application implements Serializable {
 
     private static String gender = "M";
-    private static int age = 1;
-    private static int weight = 1;
-    private static boolean if_pregnant=false;
-    private static boolean if_nursing=false;
-    private static String activity="S";
+    private static int age = 0;
+    private static int weight = 0;
+    private static boolean if_pregnant = false;
+    private static boolean if_nursing = false;
+    private static String activity = "S";
 
     //getery
     public static int getAge()

@@ -1,8 +1,5 @@
 package com.example.projekt.woda;
 
-/**
- * Created by Dawid on 11.03.2018.
- */
 
 public class Status {
     public static int hydrationPercent = 50;
