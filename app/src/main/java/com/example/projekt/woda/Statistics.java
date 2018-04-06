@@ -30,10 +30,8 @@ public class Statistics extends AppCompatActivity
         graph = (GraphView) findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
         cursor = GlobalDataBase.getDb().getWeightData();
-        int x = 0;
         while (cursor.moveToNext()){
             series.appendData( new DataPoint( cursor.getLong(1), cursor.getInt(2) ) ,false,cursor.getCount());
-            x++;
             Log.v("cursor: ", String.valueOf(cursor.getString(1)));
             Log.v("cursor: ", String.valueOf(cursor.getInt(2)));
         }

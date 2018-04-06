@@ -1,6 +1,7 @@
 package com.example.projekt.woda;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,6 +37,12 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     private static double percent;
     ProgressBar hydrationBar;
 
+    final ArrayList<String> drinks = new ArrayList<String>();
+    final ArrayList<String> desc = new ArrayList<String>();
+    final ArrayList<Integer> img = new ArrayList<Integer>();
+
+    Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -45,10 +52,15 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         setSupportActionBar(toolbar);
 
         hydrationBar = (ProgressBar) findViewById(R.id.HydrationBar);
-        hydrationBar.setProgress((int) percent);
-        final ArrayList<String> drinks = new ArrayList<String>();
-        final ArrayList<String> desc = new ArrayList<String>();
-        final ArrayList<Integer> img = new ArrayList<Integer>();
+
+        //Wczytanie z BD dzienny stan nawodnienia
+        cursor = GlobalDataBase.getDb().getDailyData();
+        while (cursor.moveToNext()){
+            hydrationBar.setProgress(cursor.getInt(1));
+            drinks.add(cursor.getString(3));
+            desc.add(cursor.getString(4));
+            img.add(cursor.getInt(2));
+        }
 
         //Rozwijanie/zwijanie menu
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -166,6 +178,14 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                 });
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        for (int i=0; i< drinks.size(); i++ ){
+            globalDataBase.getDb().insert_Daily_Data((int)percent,drinks.get(i),desc.get(i),img.get(i));
+        }
     }
 
     @Override

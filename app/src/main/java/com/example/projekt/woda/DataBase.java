@@ -24,12 +24,17 @@ public class DataBase extends SQLiteOpenHelper
     public static final String COL4="AGE";
     public static final String COL5="NURSING";
     public static final String COL6="PREGNANT";
-    //public static final String COL10="ACTIVITY";
+    public static final String COL10="ACTIVITY";
     public static final String TABLE_NAME2="DAILY_HYD";
     public static final String COL7="DATE";
     public static final String COL8="HYDRATION";
     public static final String COL9="HYDRATION_NEEDED";
     public static final String TABLE_NAME3="WEIGHT_DATA";
+    public static final String COL11="PROGRESS";
+    public static final String COL12="IMG";
+    public static final String COL13="DRINKS";
+    public static final String COL14="DESCRIPTION";
+    public static final String TABLE_NAME4="DAILY_DATA";
 
     public DataBase(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -38,9 +43,10 @@ public class DataBase extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL);"); //, "+COL10+" TEXT NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL, "+COL10+" INTEGER NOT NULL);");   //, "+COL10+" TEXT NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME2+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" TEXT NOT NULL, "+COL8+" INTEGER NOT NULL, "+COL9+" INTEGER NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME3+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL3+" INTEGER NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL11+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL);");
     }
 
     @Override
@@ -49,6 +55,7 @@ public class DataBase extends SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME1);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME2);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME3);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME4);
         onCreate(db);
     }
 
@@ -62,7 +69,7 @@ public class DataBase extends SQLiteOpenHelper
         con.put(COL4, User.getAge());
         con.put(COL5, User.getIf_nursing());
         con.put(COL6, User.getIf_pregnant());
-        //con.put(COL10, User.getActivity());
+        con.put(COL10, User.getActivity());
         result =db.insert(TABLE_NAME1, null, con);
         if(result==-1)
         {
@@ -116,6 +123,26 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
+    public boolean insert_Daily_Data(int Progress, String Drinks, String Desc, int Img)
+    {
+        long result;
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues con=new ContentValues();
+        con.put(COL11, Progress);
+        con.put(COL12, Img);
+        con.put(COL13, Drinks);
+        con.put(COL14, Desc);
+        result =db.insert(TABLE_NAME4, null, con);
+        if(result==-1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public Cursor getUserData(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cur = db.rawQuery("select * from "+TABLE_NAME1,null);
@@ -128,6 +155,12 @@ public class DataBase extends SQLiteOpenHelper
         return cur;
     }
 
+    public Cursor getDailyData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cur = db.rawQuery("select * from "+TABLE_NAME4,null);
+        return cur;
+    }
+
     public void deleteAll(){
         SQLiteDatabase db = this.getWritableDatabase();
         /*db.execSQL("delete from "+ TABLE_NAME1);
@@ -136,6 +169,7 @@ public class DataBase extends SQLiteOpenHelper
         db.execSQL(" DROP TABLE IF EXISTS "+TABLE_NAME1);
         db.execSQL(" DROP TABLE IF EXISTS "+TABLE_NAME2);
         db.execSQL(" DROP TABLE IF EXISTS "+TABLE_NAME3);
+        db.execSQL(" DROP TABLE IF EXISTS "+TABLE_NAME4);
         onCreate(db);
     }
 
