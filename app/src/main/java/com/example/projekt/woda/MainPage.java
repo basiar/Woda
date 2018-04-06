@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,16 +16,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainPage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     User user = new User();
     GlobalDataBase globalDataBase = new GlobalDataBase(this);
+    Hydration hydration = new Hydration();
+    private static double dailyHydration = 0;
+    private static double percent;
+    ProgressBar hydrationBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,24 +43,15 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         setContentView(R.layout.activity_main_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        User u = new User();
-        String[] drinks = {"Coffe","Juice","Water"};
-        String[] desc = {"Filiżanka kawy","Szklanka Soku","Szklanka Wody"};
-        Integer[] img = {R.drawable.coffe,R.drawable.juice,R.drawable.water};
-        Integer[] proc = {25,54,80};
 
-        //Dodawanie nowego napoju
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        hydrationBar = (ProgressBar) findViewById(R.id.HydrationBar);
+        hydrationBar.setProgress((int) percent);
+        final ArrayList<String> drinks = new ArrayList<String>();
+        final ArrayList<String> desc = new ArrayList<String>();
+        final ArrayList<Integer> img = new ArrayList<Integer>();
 
         //Rozwijanie/zwijanie menu
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -58,8 +60,8 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setNavigationItemSelectedListener(this);
 
         //Wyswietlenie listy wypitych napojow
-        ListView listView = (ListView) findViewById(R.id.status_ListView);
-        StatusListView statusListView = new StatusListView(this,drinks,desc,img,proc);
+        final ListView listView = (ListView) findViewById(R.id.status_ListView);
+        StatusListView statusListView = new StatusListView(this,drinks,desc,img);
         listView.setAdapter(statusListView);
 
         //Wyswietlanie porad
@@ -73,6 +75,97 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
         Date date = new Date();
         date1.setText(dateFormat.format(date));
+
+        //Dodawanie nowego napoju
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
+                View view1 = getLayoutInflater().inflate(R.layout.items3,null);
+                builder.setView(view1);
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+
+                Button _200 = (Button) view1.findViewById(R.id.b200);
+                Button _250 = (Button) view1.findViewById(R.id.b250);
+                Button _500 = (Button) view1.findViewById(R.id.b500);
+                Button _1000 = (Button) view1.findViewById(R.id.b1000);
+                Button _1500 = (Button) view1.findViewById(R.id.b1500);
+
+                _200.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        drinks.add("Woda");
+                        desc.add("200 ml");
+                        img.add(R.drawable.water2);
+                        dailyHydration+=200;
+                        percent = (dailyHydration / hydration.getHyd())*100;
+                        hydrationBar.setProgress((int) percent);
+                        listView.invalidateViews();
+                        dialog.dismiss();
+                        Log.v("hydration", String.valueOf(dailyHydration));
+                        Log.v("hyd precent", String.valueOf((int)percent));
+                    }
+                });
+                _250.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        drinks.add("Woda");
+                        desc.add("250 ml");
+                        img.add(R.drawable.water2);
+                        dailyHydration+=250;
+                        percent = (dailyHydration / hydration.getHyd())*100;
+                        hydrationBar.setProgress((int) percent);
+                        Log.v("hydration", String.valueOf(dailyHydration));
+                        Log.v("hyd precent", String.valueOf((int)percent));
+                        listView.invalidateViews();
+                        dialog.dismiss();
+                    }
+                });
+                _500.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        drinks.add("Woda");
+                        desc.add("500 ml (0,5l)");
+                        img.add(R.drawable.water2);
+                        dailyHydration+=500;
+                        percent = (dailyHydration / hydration.getHyd())*100;
+                        hydrationBar.setProgress((int) percent);
+                        listView.invalidateViews();
+                        dialog.dismiss();
+                        Log.v("hydration", String.valueOf(dailyHydration));
+                        Log.v("hyd precent", String.valueOf((int)percent));
+                    }
+                });
+                _1000.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        drinks.add("Woda");
+                        desc.add("1000ml (1l)");
+                        img.add(R.drawable.water2);
+                        dailyHydration+=1000;
+                        percent = (dailyHydration / hydration.getHyd())*100;
+                        hydrationBar.setProgress((int) percent);
+                        listView.invalidateViews();
+                        dialog.dismiss();
+                    }
+                });
+                _1500.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        drinks.add("Woda");
+                        desc.add("1500 ml (1,5l)");
+                        img.add(R.drawable.water2);
+                        dailyHydration+=1500;
+                        percent = (dailyHydration / hydration.getHyd())*100;
+                        hydrationBar.setProgress((int) percent);
+                        listView.invalidateViews();
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -32,8 +32,6 @@ public class GetUserData extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.get_user_data);
 
-        //DODAC SPINNER DO POZIOMU AKTYWNOSCI
-
         age_field = (EditText)findViewById(R.id.age_field);
         weight_field = (EditText)findViewById(R.id.weight_field);
         age_field.setText(String.valueOf(User.getAge()));
@@ -48,7 +46,6 @@ public class GetUserData extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 gender_choice = adapterView.getSelectedItem().toString();
-                Toast.makeText(adapterView.getContext(),gender_choice,Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
@@ -61,7 +58,6 @@ public class GetUserData extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 activity_choice = adapterView.getSelectedItem().toString();
-                Toast.makeText(adapterView.getContext(),gender_choice,Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}

@@ -37,8 +37,8 @@ public class Statistics extends AppCompatActivity
             Log.v("cursor: ", String.valueOf(cursor.getString(1)));
             Log.v("cursor: ", String.valueOf(cursor.getInt(2)));
         }
-        graph.addSeries(series);
 
+        graph.addSeries(series);
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {

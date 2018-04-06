@@ -13,20 +13,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class StatusListView extends ArrayAdapter<String>{
 
     private Activity context;
-    private String[] drinks;
-    private String[] desc;
-    private Integer[] img;
-    private Integer[] proc;
+    private ArrayList<String> drinks;
+    private ArrayList<String> desc;
+    private ArrayList<Integer> img;
 
-    public StatusListView(Activity context,String[] drinks,String[] desc,Integer[] img,Integer[] proc) {
+    public StatusListView(Activity context, ArrayList<String> drinks, ArrayList<String> desc, ArrayList<Integer> img) {
         super(context, R.layout.items2, drinks);
         this.drinks = drinks;
         this.desc = desc;
         this.img = img;
-        this.proc = proc;
         this.context = context;
     }
 
@@ -46,10 +46,9 @@ public class StatusListView extends ArrayAdapter<String>{
             viewHolder = (ViewHolder) r.getTag();
         }
 
-        viewHolder.drink.setText(drinks[position]);
-        viewHolder.status1.setText(desc[position]);
-        viewHolder.progressBar.setProgress(proc[position]);
-        viewHolder.imageView.setImageResource(img[position]);
+        viewHolder.drink.setText(drinks.get(position));
+        viewHolder.status1.setText(desc.get(position));
+        viewHolder.imageView.setImageResource(img.get(position));
         return r;
     }
 
@@ -62,7 +61,6 @@ public class StatusListView extends ArrayAdapter<String>{
             drink = (TextView) v.findViewById(R.id.drink);
             status1 = (TextView) v.findViewById(R.id.status1);
             imageView = (ImageView) v.findViewById(R.id.imageView2);
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         }
     }
 

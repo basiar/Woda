@@ -17,7 +17,7 @@ public class Calendar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        Cursor cursor = GlobalDataBase.getDb().getUserData();
+        /*Cursor cursor = GlobalDataBase.getDb().getUserData();
         StringBuffer stringBuffer = new StringBuffer();
         while (cursor.moveToNext()){
             stringBuffer.append("ID: "+cursor.getString(0)+"\n");
@@ -28,7 +28,16 @@ public class Calendar extends AppCompatActivity {
             stringBuffer.append("Pregnant: "+cursor.getString(5)+"\n");
             //stringBuffer.append("Activity: "+cursor.getString(6)+"\n");
             stringBuffer.append("--------------------------------------\n");
+        }*/
+
+        Cursor cursor = GlobalDataBase.getDb().getWeightData();
+        StringBuffer stringBuffer = new StringBuffer();
+        while(cursor.moveToNext()){
+            stringBuffer.append("ID: "+cursor.getString(0)+"\n");
+            stringBuffer.append("Date: "+cursor.getString(1)+"\n");
+            stringBuffer.append("Weight: "+cursor.getString(2)+"\n");
         }
+
 
         textView = (TextView)findViewById(R.id.textView2);
         textView.setText(stringBuffer.toString());
