@@ -26,10 +26,12 @@
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="129dp"
+            android:layout_width="match_parent"
             android:layout_height="28dp"
             android:layout_alignStart="@+id/tips_ListView"
+            android:layout_marginStart="-18dp"
             android:text="Niedziela 11 Marca"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,10 +41,10 @@
             android:id="@+id/HydrationBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="335dp"
-            android:layout_height="54dp"
+            android:layout_height="38dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="44dp" />
+            android:layout_marginTop="60dp" />
 
         <ListView
             android:id="@+id/tips_ListView"

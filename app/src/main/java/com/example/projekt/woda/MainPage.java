@@ -1,10 +1,11 @@
 package com.example.projekt.woda;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -30,36 +31,57 @@ import java.util.Date;
 
 public class MainPage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
-    User user = new User();
     GlobalDataBase globalDataBase = new GlobalDataBase(this);
-    Hydration hydration = new Hydration();
-    private static double dailyHydration = 0;
-    private static double percent;
+    static double dailyHydration;
+    static double dailyNeedHydration;
+    static double percent;
     ProgressBar hydrationBar;
 
-    final ArrayList<String> drinks = new ArrayList<String>();
-    final ArrayList<String> desc = new ArrayList<String>();
-    final ArrayList<Integer> img = new ArrayList<Integer>();
+    ArrayList<String> drinks = new ArrayList<String>();
+    ArrayList<String> desc = new ArrayList<String>();
+    ArrayList<Integer> img = new ArrayList<Integer>();
 
     Cursor cursor;
+    ListView listView;
+
+    Button _200;
+    Button _250;
+    Button _500;
+    Button _1000;
+    Button _1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.v("user onCreate","OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        hydrationBar = (ProgressBar) findViewById(R.id.HydrationBar);
-
-        //Wczytanie z BD dzienny stan nawodnienia
+        //Get daily data hydration get drom DB
         cursor = GlobalDataBase.getDb().getDailyData();
         while (cursor.moveToNext()){
-            hydrationBar.setProgress(cursor.getInt(1));
             drinks.add(cursor.getString(3));
             desc.add(cursor.getString(4));
             img.add(cursor.getInt(2));
+            dailyHydration = cursor.getInt(1);
+            dailyNeedHydration = (cursor.getInt(5));
+            Log.v("user daily H from DB", String.valueOf(cursor.getInt(1)));
+            Log.v("user daily NH from DB", String.valueOf(cursor.getInt(5)));
+        }
+
+        //Hydration Bar set onCreate
+        hydrationBar = findViewById(R.id.HydrationBar);
+        hydrationBar.setScaleY(3f);
+        hydrationBar.getProgressDrawable().setColorFilter(
+                Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
+        if(cursor.getCount() == 0){
+            hydrationBar.setProgress(0);
+            dailyNeedHydration = Hydration.getHyd();
+        }
+        else {
+            hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100));
         }
 
         //Rozwijanie/zwijanie menu
@@ -72,7 +94,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setNavigationItemSelectedListener(this);
 
         //Wyswietlenie listy wypitych napojow
-        final ListView listView = (ListView) findViewById(R.id.status_ListView);
+        listView = (ListView) findViewById(R.id.status_ListView);
         StatusListView statusListView = new StatusListView(this,drinks,desc,img);
         listView.setAdapter(statusListView);
 
@@ -99,11 +121,11 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                 final AlertDialog dialog = builder.create();
                 dialog.show();
 
-                Button _200 = (Button) view1.findViewById(R.id.b200);
-                Button _250 = (Button) view1.findViewById(R.id.b250);
-                Button _500 = (Button) view1.findViewById(R.id.b500);
-                Button _1000 = (Button) view1.findViewById(R.id.b1000);
-                Button _1500 = (Button) view1.findViewById(R.id.b1500);
+                _200 = (Button) view1.findViewById(R.id.b200);
+                _250 = (Button) view1.findViewById(R.id.b250);
+                _500 = (Button) view1.findViewById(R.id.b500);
+                _1000 = (Button) view1.findViewById(R.id.b1000);
+                _1500 = (Button) view1.findViewById(R.id.b1500);
 
                 _200.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -112,12 +134,13 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         desc.add("200 ml");
                         img.add(R.drawable.water2);
                         dailyHydration+=200;
-                        percent = (dailyHydration / hydration.getHyd())*100;
+                        percent = (dailyHydration / dailyNeedHydration)*100;
                         hydrationBar.setProgress((int) percent);
                         listView.invalidateViews();
                         dialog.dismiss();
-                        Log.v("hydration", String.valueOf(dailyHydration));
-                        Log.v("hyd precent", String.valueOf((int)percent));
+                        Log.v("log hydration(daily)", String.valueOf(dailyHydration));
+                        Log.v("log hydration(precent)", String.valueOf((int)percent));
+                        Log.v("log hydration(getHyd)", String.valueOf(Hydration.getHyd()));
                     }
                 });
                 _250.setOnClickListener(new View.OnClickListener(){
@@ -127,10 +150,11 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         desc.add("250 ml");
                         img.add(R.drawable.water2);
                         dailyHydration+=250;
-                        percent = (dailyHydration / hydration.getHyd())*100;
+                        percent = (dailyHydration / dailyNeedHydration)*100;
                         hydrationBar.setProgress((int) percent);
-                        Log.v("hydration", String.valueOf(dailyHydration));
-                        Log.v("hyd precent", String.valueOf((int)percent));
+                        Log.v("log hydration", String.valueOf(dailyHydration));
+                        Log.v("log hyd precent", String.valueOf((int)percent));
+                        Log.v("log hydration(getHyd)", String.valueOf(Hydration.getHyd()));
                         listView.invalidateViews();
                         dialog.dismiss();
                     }
@@ -142,12 +166,12 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         desc.add("500 ml (0,5l)");
                         img.add(R.drawable.water2);
                         dailyHydration+=500;
-                        percent = (dailyHydration / hydration.getHyd())*100;
+                        percent = (dailyHydration / dailyNeedHydration)*100;
                         hydrationBar.setProgress((int) percent);
                         listView.invalidateViews();
                         dialog.dismiss();
-                        Log.v("hydration", String.valueOf(dailyHydration));
-                        Log.v("hyd precent", String.valueOf((int)percent));
+                        Log.v("log hydration", String.valueOf(dailyHydration));
+                        Log.v("log hyd precent", String.valueOf((int)percent));
                     }
                 });
                 _1000.setOnClickListener(new View.OnClickListener(){
@@ -157,7 +181,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         desc.add("1000ml (1l)");
                         img.add(R.drawable.water2);
                         dailyHydration+=1000;
-                        percent = (dailyHydration / hydration.getHyd())*100;
+                        percent = (dailyHydration /dailyNeedHydration)*100;
                         hydrationBar.setProgress((int) percent);
                         listView.invalidateViews();
                         dialog.dismiss();
@@ -170,7 +194,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         desc.add("1500 ml (1,5l)");
                         img.add(R.drawable.water2);
                         dailyHydration+=1500;
-                        percent = (dailyHydration / hydration.getHyd())*100;
+                        percent = (dailyHydration / dailyNeedHydration)*100;
                         hydrationBar.setProgress((int) percent);
                         listView.invalidateViews();
                         dialog.dismiss();
@@ -178,14 +202,6 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                 });
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        for (int i=0; i< drinks.size(); i++ ){
-            globalDataBase.getDb().insert_Daily_Data((int)percent,drinks.get(i),desc.get(i),img.get(i));
-        }
     }
 
     @Override
@@ -198,6 +214,68 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         else {
             super.onBackPressed();
         }
+        Log.v("user onBackPressed","onBackPressed");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v("user onPause","=== OnPause ===");
+        //Save daily data hydration to DB onPause
+        cursor = GlobalDataBase.getDb().getDailyData();
+        for (int i=cursor.getCount(); i< drinks.size(); i++ ){
+            globalDataBase.getDb().insert_Daily_Data((int)dailyHydration,drinks.get(i),desc.get(i),img.get(i),(int)dailyNeedHydration);
+        }
+        drinks.removeAll(drinks);
+        desc.removeAll(desc);
+        img.removeAll(img);
+        dailyHydration = 0;
+    }
+
+    @Override
+    protected void onResume() {
+        Log.v("log user onResume","=== OnResume ===");
+        //Get daily data hydration from DB onResume
+        super.onResume();
+        drinks.removeAll(drinks);
+        desc.removeAll(desc);
+        img.removeAll(img);
+        cursor = GlobalDataBase.getDb().getDailyData();
+        while (cursor.moveToNext()){
+            dailyHydration = cursor.getInt(1);
+            drinks.add(cursor.getString(3));
+            desc.add(cursor.getString(4));
+            img.add(cursor.getInt(2));
+            dailyNeedHydration = (cursor.getInt(5));
+            Log.v("user C dailyH Resume", String.valueOf(cursor.getInt(1)));
+            Log.v("user H.getHyd() Resume", String.valueOf(Hydration.getHyd()));
+            Log.v("user C daily NeH Resume", String.valueOf(cursor.getInt(5)));
+        }
+        hydrationBar = findViewById(R.id.HydrationBar);
+        if(cursor.getCount() == 0){
+            hydrationBar.setProgress(0);
+            dailyNeedHydration = Hydration.getHyd();}
+        else{ hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100)); }
+        Log.v("user progressbar", String.valueOf((int)((dailyHydration/dailyNeedHydration)*100)));
+        listView = (ListView) findViewById(R.id.status_ListView);
+        StatusListView statusListView = new StatusListView(this,drinks,desc,img);
+        listView.setAdapter(statusListView);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v("log user onDestroy","=== OnDestroy ====");
+        //Save daily data hydration to DB onDestroy
+        Log.v("user dailyH Destroy", String.valueOf(dailyHydration));
+        cursor = GlobalDataBase.getDb().getDailyData();
+        for (int i=cursor.getCount(); i< drinks.size(); i++ ){
+            globalDataBase.getDb().insert_Daily_Data((int)dailyHydration,drinks.get(i),desc.get(i),img.get(i),(int) Hydration.getHyd());
+        }
+        drinks.removeAll(drinks);
+        desc.removeAll(desc);
+        img.removeAll(img);
+        dailyHydration = 0;
     }
 
     @Override

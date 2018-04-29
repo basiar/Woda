@@ -43,10 +43,10 @@ public class DataBase extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL, "+COL10+" INTEGER NOT NULL);");   //, "+COL10+" TEXT NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL, "+COL10+" INTEGER NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME2+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" TEXT NOT NULL, "+COL8+" INTEGER NOT NULL, "+COL9+" INTEGER NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME3+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL3+" INTEGER NOT NULL);");
-        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL11+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL11+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL, "+COL9+" INTEGER NOT NULL);");
     }
 
     @Override
@@ -110,7 +110,7 @@ public class DataBase extends SQLiteOpenHelper
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
         Date date = new Date();
         con.put(COL7,(dateFormat.format(date)));
-        con.put(COL3, Hydration.getHyd());
+        con.put(COL9, Hydration.getHyd());
         //dodac nawodnienie z danego dnia-w sensie ile komus sie udalo wypic
         result=db.insert(TABLE_NAME2, null, con);
         if(result==-1)
@@ -123,7 +123,7 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public boolean insert_Daily_Data(int Progress, String Drinks, String Desc, int Img)
+    public boolean insert_Daily_Data(int Progress, String Drinks, String Desc, int Img, int NeededHyd)
     {
         long result;
         SQLiteDatabase db=this.getWritableDatabase();
@@ -132,6 +132,7 @@ public class DataBase extends SQLiteOpenHelper
         con.put(COL12, Img);
         con.put(COL13, Drinks);
         con.put(COL14, Desc);
+        con.put(COL9, NeededHyd);
         result =db.insert(TABLE_NAME4, null, con);
         if(result==-1)
         {
@@ -146,6 +147,12 @@ public class DataBase extends SQLiteOpenHelper
     public Cursor getUserData(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cur = db.rawQuery("select * from "+TABLE_NAME1,null);
+        return cur;
+    }
+
+    public Cursor getHydration(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cur = db.rawQuery("select * from "+TABLE_NAME2,null);
         return cur;
     }
 

@@ -8,7 +8,7 @@ import android.app.Application;
 
 public class Hydration extends Application
 {
-    private static double hyd = 2500;
+    private static double hyd;
     public static double getHyd() {
         return hyd;
     }

@@ -1,5 +1,6 @@
 package com.example.projekt.woda;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,6 +51,8 @@ public class GetUserData extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
+
+
         spinner_activity = (Spinner) findViewById(R.id.activity_choice);
         adapter_activity = ArrayAdapter.createFromResource(this,R.array.activity_list, android.R.layout.simple_spinner_item);
         adapter_activity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -63,30 +66,35 @@ public class GetUserData extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
-        ok = (Button)findViewById(R.id.ok);
+
+        ok = findViewById(R.id.ok);
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 User.setAge(Integer.parseInt(age_field.getText().toString()));
                 User.setWeight(Integer.parseInt(weight_field.getText().toString()));
-                User.setGender(gender_choice);
-                if(gender_choice=="M")
-                {
+                if(gender_choice.length() == 9) {
+                    User.setGender("M");
                     box.setChecked(false);
                     box2.setChecked(false);
                 }
+                else {
+                    User.setGender("K");
+                }
                 User.setIf_pregnant(box.isChecked());
                 User.setIf_nursing(box2.isChecked());
-                if(activity_choice=="Średni"){User.setActivity("S");}
-                else {User.setActivity("W");}
-                User.setActivity(activity_choice);
-                boolean b = GlobalDataBase.getDb().insert_UserData();
-                Log.v("b:", String.valueOf(b));
-                boolean bb = GlobalDataBase.getDb().insert_Weight();
-                Log.v("bb:", String.valueOf(bb));
+                if(activity_choice=="Średni"){
+                    User.setActivity("S");
+                }
+                else {
+                    User.setActivity("W");
+                }
 
-                Intent intent = new Intent(GetUserData.this,MainPage.class);
-                startActivity(intent);
+                GlobalDataBase.getDb().insert_UserData();
+                GlobalDataBase.getDb().insert_Weight();
+
+                Hydration.setHyd();
+                finish();
             }
         });
     }

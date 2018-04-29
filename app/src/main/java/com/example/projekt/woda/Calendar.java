@@ -18,7 +18,7 @@ public class Calendar extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         // Wyświetlanie tabeli 1
-        /*Cursor cursor = GlobalDataBase.getDb().getUserData();
+        Cursor cursor = GlobalDataBase.getDb().getUserData();
         StringBuffer stringBuffer = new StringBuffer();
         while (cursor.moveToNext()){
             stringBuffer.append("ID: "+cursor.getString(0)+"\n");
@@ -29,7 +29,7 @@ public class Calendar extends AppCompatActivity {
             stringBuffer.append("Pregnant: "+cursor.getString(5)+"\n");
             stringBuffer.append("Activity: "+cursor.getString(6)+"\n");
             stringBuffer.append("--------------------------------------\n");
-        }*/
+        }
 
         // Wyświetlanie tabeli 3
        /* Cursor cursor = GlobalDataBase.getDb().getWeightData();
@@ -41,7 +41,7 @@ public class Calendar extends AppCompatActivity {
         }*/
 
         // Wyświetlanie tabeli 4
-        Cursor cursor = GlobalDataBase.getDb().getDailyData();
+        /*Cursor cursor = GlobalDataBase.getDb().getDailyData();
         StringBuffer stringBuffer = new StringBuffer();
         while(cursor.moveToNext()){
             stringBuffer.append("ID: "+cursor.getString(0)+"\n");
@@ -49,7 +49,7 @@ public class Calendar extends AppCompatActivity {
             stringBuffer.append("Img: "+cursor.getString(2)+"\n");
             stringBuffer.append("Drinks: "+cursor.getString(3)+"\n");
             stringBuffer.append("Description: "+cursor.getString(4)+"\n");
-        }
+        }*/
 
         textView = (TextView)findViewById(R.id.textView2);
         textView.setText(stringBuffer.toString());
