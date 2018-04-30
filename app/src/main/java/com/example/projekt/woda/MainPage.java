@@ -1,5 +1,7 @@
 package com.example.projekt.woda;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,6 +30,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Calendar;
 
 public class MainPage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -35,7 +38,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     static double dailyHydration;
     static double dailyNeedHydration;
     static double percent;
-    ProgressBar hydrationBar;
+    private int dayInYear;
 
     ArrayList<String> drinks = new ArrayList<String>();
     ArrayList<String> desc = new ArrayList<String>();
@@ -43,6 +46,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
 
     Cursor cursor;
     ListView listView;
+    ProgressBar hydrationBar;
 
     Button _200;
     Button _250;
@@ -67,18 +71,30 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
             img.add(cursor.getInt(2));
             dailyHydration = cursor.getInt(1);
             dailyNeedHydration = (cursor.getInt(5));
-            Log.v("user daily H from DB", String.valueOf(cursor.getInt(1)));
-            Log.v("user daily NH from DB", String.valueOf(cursor.getInt(5)));
+            dayInYear = (cursor.getInt(6));
+        }
+        
+        //Check if is new day
+        Calendar calendar = Calendar.getInstance();
+        if( calendar.get(Calendar.DAY_OF_YEAR) != dayInYear){
+            if(cursor.getCount()!=0){
+                GlobalDataBase.getDb().insert_Hydration((int)dailyHydration, (int)dailyNeedHydration);
+                dailyHydration = 0;
+                GlobalDataBase.getDb().deleteDailyData();
+            }
         }
 
         //Hydration Bar set onCreate
         hydrationBar = findViewById(R.id.HydrationBar);
         hydrationBar.setScaleY(3f);
-        hydrationBar.getProgressDrawable().setColorFilter(
-                Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
-        if(cursor.getCount() == 0){
+        hydrationBar.getProgressDrawable().setColorFilter(Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
+        if(cursor.getCount() == 0) {
             hydrationBar.setProgress(0);
-            dailyNeedHydration = Hydration.getHyd();
+            cursor = GlobalDataBase.getDb().getHydration();
+            if(cursor.getCount() != 0){
+                cursor.moveToLast();
+                dailyNeedHydration = cursor.getInt(3);
+            }
         }
         else {
             hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100));
@@ -100,18 +116,18 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
 
         //Wyswietlanie porad
         ArrayAdapter<String> porady_adapter = new ArrayAdapter<String>(this, R.layout.items, R.id.tip ,Tips.advice);
-        ListView listView2 = (ListView) findViewById(R.id.tips_ListView);
+        ListView listView2 = findViewById(R.id.tips_ListView);
         listView2.setAdapter(porady_adapter);
 
         //Wyswietlanie daty na gorze ekranu
         TextView date1;
-        date1 = (TextView) findViewById(R.id.date);
+        date1 = findViewById(R.id.date);
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
         Date date = new Date();
         date1.setText(dateFormat.format(date));
 
         //Dodawanie nowego napoju
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -205,8 +221,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -267,7 +282,6 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         super.onDestroy();
         Log.v("log user onDestroy","=== OnDestroy ====");
         //Save daily data hydration to DB onDestroy
-        Log.v("user dailyH Destroy", String.valueOf(dailyHydration));
         cursor = GlobalDataBase.getDb().getDailyData();
         for (int i=cursor.getCount(); i< drinks.size(); i++ ){
             globalDataBase.getDb().insert_Daily_Data((int)dailyHydration,drinks.get(i),desc.get(i),img.get(i),(int) Hydration.getHyd());
@@ -319,7 +333,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         }
         else if (id == R.id.calendar)
         {
-            Intent intent = new Intent(MainPage.this,Calendar.class);
+            Intent intent = new Intent(MainPage.this,MyCalendar.class);
             startActivity(intent);
         }
         else if (id == R.id.nav_share)

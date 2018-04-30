@@ -16,15 +16,18 @@ import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Statistics extends AppCompatActivity
 {
     Cursor cursor;
-    GraphView graph;
+    GraphView graph,graph2;
     LineGraphSeries<DataPoint> series;
     PointsGraphSeries<DataPoint> series2;
+    LineGraphSeries<DataPoint> series3;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM");
 
     @Override
@@ -33,20 +36,23 @@ public class Statistics extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistic);
 
-        series = new LineGraphSeries<DataPoint>();
-        series2 = new PointsGraphSeries<DataPoint>();
-        cursor = GlobalDataBase.getDb().getWeightData();
-
-        graph = (GraphView) findViewById(R.id.graph);
+        graph = findViewById(R.id.graph);
         graph.getViewport().setScalable(true);
         graph.getViewport().setScalableY(true);
 
+        series = new LineGraphSeries<DataPoint>();
+        series2 = new PointsGraphSeries<DataPoint>();
+
+        cursor = GlobalDataBase.getDb().getWeightData();
         while (cursor.moveToNext()){
             series.appendData( new DataPoint(cursor.getLong(1), cursor.getInt(2)),false, cursor.getCount());
             series2.appendData( new DataPoint(cursor.getLong(1), cursor.getInt(2)),false, cursor.getCount());
         }
+
         graph.addSeries(series2);
         graph.addSeries(series);
+
+;
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {
@@ -62,11 +68,16 @@ public class Statistics extends AppCompatActivity
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
                 Context context = getApplicationContext();
-                Toast.makeText(context, String.valueOf(dataPoint.getY()), Toast.LENGTH_SHORT).show();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((long) dataPoint.getX());
+                String x = formatter.format(calendar.getTime());
+                Toast.makeText(context, "Data: "+String.valueOf(x)+
+                        "\nWaga: "+String.valueOf(dataPoint.getY()) , Toast.LENGTH_LONG).show();
             }
         });
 
-        if(cursor.getCount() != 0){
+        if(cursor.getCount() != 0) {
             graph.getViewport().setXAxisBoundsManual(true);
             cursor.moveToFirst();
             graph.getViewport().setMinX(cursor.getLong(1));
@@ -74,17 +85,58 @@ public class Statistics extends AppCompatActivity
             graph.getViewport().setMaxX(cursor.getLong(1));
         }
 
+        //----------------------------------------------------------------------------------------//
 
+        graph2 = findViewById(R.id.graph2);
+        graph2.getViewport().setScalable(true);
+        graph2.getViewport().setScalableY(true);
 
-        /*GraphView graph2 = (GraphView) findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
-        Cursor cursor2 = GlobalDataBase.getDb().getWeightData();
-        x = 0;
+        series2 = new PointsGraphSeries<DataPoint>();
+        series3 = new LineGraphSeries<DataPoint>();
+
+        cursor = GlobalDataBase.getDb().getHydration();
         while (cursor.moveToNext()){
-            series2.appendData( new DataPoint( x , cursor.getInt(2) ) ,true,100);
-            x++;
+            series.appendData( new DataPoint(cursor.getLong(1), cursor.getInt(2)),false, cursor.getCount());
+            series2.appendData( new DataPoint(cursor.getLong(1), cursor.getInt(2)),false, cursor.getCount());
+            Log.v("user statisctic"," data cursor.getLong(1)="+cursor.getLong(1));
+            Log.v("user statisctic"," dailyH cursor.getLong(12)="+cursor.getLong(2));
         }
-        graph.addSeries(series2);*/
+
+        graph2.addSeries(series2);
+        graph2.addSeries(series);
+        graph2.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) {
+                    return simpleDateFormat.format(new Date((long)value));
+                } else {
+                    return super.formatLabel(value, isValueX);
+                }
+            }
+        });
+
+        series.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPoint) {
+                Context context = getApplicationContext();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((long) dataPoint.getX());
+                String x = formatter.format(calendar.getTime());
+                Toast.makeText(context, "Data: "+String.valueOf(x)+
+                        "\nWoda(ml): "+String.valueOf(dataPoint.getY()) , Toast.LENGTH_LONG).show();
+            }
+        });
+
+        if(cursor.getCount() != 0) {
+            graph2.getViewport().setXAxisBoundsManual(true);
+            cursor.moveToFirst();
+            graph2.getViewport().setMinX(cursor.getLong(1));
+            cursor.moveToLast();
+            graph2.getViewport().setMaxX(cursor.getLong(1));
+        }
+
 
     }
 

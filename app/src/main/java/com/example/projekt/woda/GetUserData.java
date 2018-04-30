@@ -2,6 +2,7 @@ package com.example.projekt.woda;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,13 +34,13 @@ public class GetUserData extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.get_user_data);
 
-        age_field = (EditText)findViewById(R.id.age_field);
-        weight_field = (EditText)findViewById(R.id.weight_field);
+        age_field = findViewById(R.id.age_field);
+        weight_field = findViewById(R.id.weight_field);
         age_field.setText(String.valueOf(User.getAge()));
         weight_field.setText(String.valueOf(User.getWeight()));
-        box=(CheckBox)findViewById(R.id.is_pregnant);
-        box2=(CheckBox)findViewById(R.id.is_nursing);
-        spinner_gender = (Spinner) findViewById(R.id.gender_choice);
+        box = findViewById(R.id.is_pregnant);
+        box2 = findViewById(R.id.is_nursing);
+        spinner_gender = findViewById(R.id.gender_choice);
         adapter_gender = ArrayAdapter.createFromResource(this,R.array.gender_list, android.R.layout.simple_spinner_item);
         adapter_gender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_gender.setAdapter(adapter_gender);
@@ -66,6 +67,12 @@ public class GetUserData extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+        Cursor cursor = GlobalDataBase.getDb().getUserData();
+        if(cursor.getCount() != 0){
+            cursor.moveToLast();
+            age_field.setText(String.valueOf(cursor.getInt(3)));
+            weight_field.setText(String.valueOf(cursor.getInt(2)));
+        }
 
         ok = findViewById(R.id.ok);
         ok.setOnClickListener(new View.OnClickListener() {

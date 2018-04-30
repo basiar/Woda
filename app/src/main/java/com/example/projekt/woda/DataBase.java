@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -44,9 +45,9 @@ public class DataBase extends SQLiteOpenHelper
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL, "+COL10+" INTEGER NOT NULL);");
-        db.execSQL(" CREATE TABLE "+TABLE_NAME2+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" TEXT NOT NULL, "+COL8+" INTEGER NOT NULL, "+COL9+" INTEGER NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME2+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL8+" INTEGER NOT NULL, "+COL9+" INTEGER NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME3+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL3+" INTEGER NOT NULL);");
-        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL11+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL, "+COL9+" INTEGER NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL11+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL, "+COL9+" INTEGER NOT NULL, "+COL7+" INTEGER NOT NULL);");
     }
 
     @Override
@@ -102,16 +103,16 @@ public class DataBase extends SQLiteOpenHelper
     }
 
     //ogarnac gdzie to zrobic zeby codziennie to sie samo wykonywalo
-    public boolean insert_Hydration()
+    public boolean insert_Hydration(int DailyHydration,int DailyNeedHydration)
     {
         long result;
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues con=new ContentValues();
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
         Date date = new Date();
-        con.put(COL7,(dateFormat.format(date)));
-        con.put(COL9, Hydration.getHyd());
-        //dodac nawodnienie z danego dnia-w sensie ile komus sie udalo wypic
+        con.put(COL7, date.getTime());
+        con.put(COL8, DailyHydration);
+        con.put(COL9, DailyNeedHydration);
         result=db.insert(TABLE_NAME2, null, con);
         if(result==-1)
         {
@@ -133,6 +134,8 @@ public class DataBase extends SQLiteOpenHelper
         con.put(COL13, Drinks);
         con.put(COL14, Desc);
         con.put(COL9, NeededHyd);
+        Calendar c = Calendar.getInstance();
+        con.put(COL7,c.get(Calendar.DAY_OF_YEAR));
         result =db.insert(TABLE_NAME4, null, con);
         if(result==-1)
         {
@@ -180,4 +183,8 @@ public class DataBase extends SQLiteOpenHelper
         onCreate(db);
     }
 
+    public void deleteDailyData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ TABLE_NAME4);
+    }
 }
