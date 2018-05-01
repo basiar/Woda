@@ -8,68 +8,56 @@
     tools:context="com.example.projekt.woda.com.example.projekt.woda.MainPage"
     tools:showIn="@layout/app_bar_main_page">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/date"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="28dp"
+        android:layout_alignStart="@+id/tips_ListView"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="Niedziela 11 Marca"
+        app:layout_constraintBottom_toTopOf="@+id/HydrationBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ProgressBar
+        android:id="@+id/HydrationBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="335dp"
+        android:layout_height="38dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/status_ListView"
+        android:layout_width="333dp"
+        android:layout_height="315dp"
+        android:layout_below="@+id/HydrationBar"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/border"
+        app:layout_constraintBottom_toTopOf="@+id/tips_ListView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:layout_alignStart="@+id/tips_ListView"
-            android:layout_marginStart="-18dp"
-            android:text="Niedziela 11 Marca"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ProgressBar
-            android:id="@+id/HydrationBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="335dp"
-            android:layout_height="38dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp" />
-
-        <ListView
-            android:id="@+id/tips_ListView"
-            android:layout_width="333dp"
-            android:layout_height="92dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/border"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ListView
-            android:id="@+id/status_ListView"
-            android:layout_width="333dp"
-            android:layout_height="310dp"
-            android:layout_below="@+id/HydrationBar"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/border"
-            app:layout_constraintBottom_toTopOf="@+id/tips_ListView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/date" />
-
-    </RelativeLayout>
+        app:layout_constraintTop_toBottomOf="@+id/HydrationBar" />
 
 
 </android.support.constraint.ConstraintLayout>

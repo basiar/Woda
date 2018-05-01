@@ -54,6 +54,11 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     Button _1000;
     Button _1500;
 
+    AlarmManager alarmManager;
+    PendingIntent pendingIntent;
+    Intent intent;
+    Boolean is_notification_on = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -73,7 +78,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
             dailyNeedHydration = (cursor.getInt(5));
             dayInYear = (cursor.getInt(6));
         }
-        
+
         //Check if is new day
         Calendar calendar = Calendar.getInstance();
         if( calendar.get(Calendar.DAY_OF_YEAR) != dayInYear){
@@ -100,10 +105,12 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
             hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100));
         }
 
+        Log.v("user DH", String.valueOf(dailyNeedHydration));
+
         //Rozwijanie/zwijanie menu
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                      this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -115,9 +122,9 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         listView.setAdapter(statusListView);
 
         //Wyswietlanie porad
-        ArrayAdapter<String> porady_adapter = new ArrayAdapter<String>(this, R.layout.items, R.id.tip ,Tips.advice);
+        /*ArrayAdapter<String> porady_adapter = new ArrayAdapter<String>(this, R.layout.items, R.id.tip ,Tips.advice);
         ListView listView2 = findViewById(R.id.tips_ListView);
-        listView2.setAdapter(porady_adapter);
+        listView2.setAdapter(porady_adapter);*/
 
         //Wyswietlanie daty na gorze ekranu
         TextView date1;
@@ -270,7 +277,8 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         if(cursor.getCount() == 0){
             hydrationBar.setProgress(0);
             dailyNeedHydration = Hydration.getHyd();}
-        else{ hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100)); }
+        else{
+            hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100)); }
         Log.v("user progressbar", String.valueOf((int)((dailyHydration/dailyNeedHydration)*100)));
         listView = (ListView) findViewById(R.id.status_ListView);
         StatusListView statusListView = new StatusListView(this,drinks,desc,img);
@@ -301,16 +309,24 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-        {
-            return true;
+        //Notyfications on
+        if (id == R.id.notifications) {
+            intent = new Intent(this, AlarmReceivier.class);
+            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3000 , pendingIntent);
+            is_notification_on = true;
+        }
+        //Notyfications off
+        if (id == R.id.notifications_off) {
+            if(is_notification_on){
+                alarmManager.cancel(pendingIntent);
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Powiadomienia nie są wyłączone", Toast.LENGTH_SHORT).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

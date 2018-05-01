@@ -22,7 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".MyCalendar"></activity>
-
+        <receiver android:name=".AlarmReceivier"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>
