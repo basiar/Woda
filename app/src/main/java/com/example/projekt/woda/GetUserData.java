@@ -54,7 +54,7 @@ public class GetUserData extends AppCompatActivity {
         });
 
 
-        spinner_activity = (Spinner) findViewById(R.id.activity_choice);
+        spinner_activity = findViewById(R.id.activity_choice);
         adapter_activity = ArrayAdapter.createFromResource(this,R.array.activity_list, android.R.layout.simple_spinner_item);
         adapter_activity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_activity.setAdapter(adapter_activity);
@@ -67,6 +67,7 @@ public class GetUserData extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+        //Set User fields from DB if exits
         Cursor cursor = GlobalDataBase.getDb().getUserData();
         if(cursor.getCount() != 0){
             cursor.moveToLast();
@@ -96,11 +97,11 @@ public class GetUserData extends AppCompatActivity {
                 else {
                     User.setActivity("W");
                 }
-
-                GlobalDataBase.getDb().insert_UserData();
-                GlobalDataBase.getDb().insert_Weight();
-
                 Hydration.setHyd();
+
+                GlobalDataBase.getDb().insert_Weight();
+                GlobalDataBase.getDb().insert_UserData();
+
                 finish();
             }
         });

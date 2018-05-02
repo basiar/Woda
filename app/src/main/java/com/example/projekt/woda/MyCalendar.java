@@ -63,6 +63,7 @@ public class MyCalendar extends AppCompatActivity {
             stringBuffer.append("Description: "+cursor.getString(4)+"\n");
             stringBuffer.append("Daily NH: "+cursor.getString(5)+"\n");
             stringBuffer.append("Date: "+cursor.getString(6)+"\n");
+            stringBuffer.append("Last added: "+cursor.getString(7)+"\n");
             stringBuffer.append("--------------------------------------\n");
         }
 
@@ -78,6 +79,7 @@ public class MyCalendar extends AppCompatActivity {
             public void onClick(View view) {
                 GlobalDataBase.getDb().deleteAll();
                 textView2.setText("");
+                textView.setText("");
             }
         });
     }

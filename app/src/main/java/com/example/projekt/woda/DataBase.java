@@ -35,6 +35,7 @@ public class DataBase extends SQLiteOpenHelper
     public static final String COL12="IMG";
     public static final String COL13="DRINKS";
     public static final String COL14="DESCRIPTION";
+    public static final String COL15="LAST_ADDED";
     public static final String TABLE_NAME4="DAILY_DATA";
 
     public DataBase(Context context) {
@@ -44,10 +45,10 @@ public class DataBase extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL, "+COL10+" INTEGER NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL, "+COL10+" TEXT NOT NULL, "+COL9+" INTEGER NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME2+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL8+" INTEGER NOT NULL, "+COL9+" INTEGER NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME3+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL3+" INTEGER NOT NULL);");
-        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL11+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL, "+COL9+" INTEGER NOT NULL, "+COL7+" INTEGER NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL11+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL, "+COL9+" INTEGER NOT NULL, "+COL7+" INTEGER NOT NULL, "+COL15+" INTEGER NOT NULL);");
     }
 
     @Override
@@ -71,6 +72,7 @@ public class DataBase extends SQLiteOpenHelper
         con.put(COL5, User.getIf_nursing());
         con.put(COL6, User.getIf_pregnant());
         con.put(COL10, User.getActivity());
+        con.put(COL9, Hydration.getHyd());
         result =db.insert(TABLE_NAME1, null, con);
         if(result==-1)
         {
@@ -124,7 +126,7 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public boolean insert_Daily_Data(int Progress, String Drinks, String Desc, int Img, int NeededHyd)
+    public boolean insert_Daily_Data(int Progress, String Drinks, String Desc, int Img, int NeededHyd,int Last_added)
     {
         long result;
         SQLiteDatabase db=this.getWritableDatabase();
@@ -136,6 +138,7 @@ public class DataBase extends SQLiteOpenHelper
         con.put(COL9, NeededHyd);
         Calendar c = Calendar.getInstance();
         con.put(COL7,c.get(Calendar.DAY_OF_YEAR));
+        con.put(COL15, Last_added);
         result =db.insert(TABLE_NAME4, null, con);
         if(result==-1)
         {
@@ -186,5 +189,10 @@ public class DataBase extends SQLiteOpenHelper
     public void deleteDailyData(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from "+ TABLE_NAME4);
+    }
+
+    public void deleteLastDailyData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " +TABLE_NAME4+ " WHERE id = (SELECT MAX(id) FROM "+TABLE_NAME4+")");
     }
 }
