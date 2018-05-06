@@ -31,7 +31,6 @@ public class DataBase extends SQLiteOpenHelper
     public static final String COL8="HYDRATION";
     public static final String COL9="HYDRATION_NEEDED";
     public static final String TABLE_NAME3="WEIGHT_DATA";
-    public static final String COL11="PROGRESS";
     public static final String COL12="IMG";
     public static final String COL13="DRINKS";
     public static final String COL14="DESCRIPTION";
@@ -48,7 +47,7 @@ public class DataBase extends SQLiteOpenHelper
         db.execSQL(" CREATE TABLE "+TABLE_NAME1+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT NOT NULL, "+COL3+" INTEGER NOT NULL, "+COL4+ " INTEGER NOT NULL, "+COL5+" INTEGER NOT NULL, "+COL6+" INTEGER NOT NULL, "+COL10+" TEXT NOT NULL, "+COL9+" INTEGER NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME2+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL8+" INTEGER NOT NULL, "+COL9+" INTEGER NOT NULL);");
         db.execSQL(" CREATE TABLE "+TABLE_NAME3+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL7+" INTEGER NOT NULL, "+COL3+" INTEGER NOT NULL);");
-        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL11+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL, "+COL9+" INTEGER NOT NULL, "+COL7+" INTEGER NOT NULL, "+COL15+" INTEGER NOT NULL);");
+        db.execSQL(" CREATE TABLE "+TABLE_NAME4+" ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COL8+" INTEGER NOT NULL, "+COL12+" INTEGER NOT NULL, "+COL13+" TEXT NOT NULL, "+COL14+" TEXT NOT NULL, "+COL7+" INTEGER NOT NULL, "+COL15+" INTEGER NOT NULL);");
     }
 
     @Override
@@ -126,16 +125,15 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public boolean insert_Daily_Data(int Progress, String Drinks, String Desc, int Img, int NeededHyd,int Last_added)
+    public boolean insert_Daily_Data(int DailyHydration, String Drinks, String Desc, int Img,int Last_added)
     {
         long result;
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues con=new ContentValues();
-        con.put(COL11, Progress);
+        con.put(COL8, DailyHydration);
         con.put(COL12, Img);
         con.put(COL13, Drinks);
         con.put(COL14, Desc);
-        con.put(COL9, NeededHyd);
         Calendar c = Calendar.getInstance();
         con.put(COL7,c.get(Calendar.DAY_OF_YEAR));
         con.put(COL15, Last_added);
@@ -176,9 +174,6 @@ public class DataBase extends SQLiteOpenHelper
 
     public void deleteAll(){
         SQLiteDatabase db = this.getWritableDatabase();
-        /*db.execSQL("delete from "+ TABLE_NAME1);
-        db.execSQL("delete from "+ TABLE_NAME2);
-        db.execSQL("delete from "+ TABLE_NAME3);*/
         db.execSQL(" DROP TABLE IF EXISTS "+TABLE_NAME1);
         db.execSQL(" DROP TABLE IF EXISTS "+TABLE_NAME2);
         db.execSQL(" DROP TABLE IF EXISTS "+TABLE_NAME3);

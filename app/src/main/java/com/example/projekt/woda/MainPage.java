@@ -2,11 +2,9 @@ package com.example.projekt.woda;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.icu.text.UnicodeSet;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -20,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -67,8 +64,10 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         Log.v("user onCreate","OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        dailyHydration = 0;
 
         //Get daily data hydration get drom DB
         cursor = GlobalDataBase.getDb().getDailyData();
@@ -77,23 +76,18 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
             desc.add(cursor.getString(4));
             img.add(cursor.getInt(2));
             dailyHydration = cursor.getInt(1);
-            dailyNeedHydration = (cursor.getInt(5));
-            dayInYear = (cursor.getInt(6));
-            lastWaterAdded.add(cursor.getInt(7));
-        }
-        if(cursor.getCount() == 0){
-            dailyHydration = 0;
+            dayInYear = (cursor.getInt(5));
+            lastWaterAdded.add(cursor.getInt(6));
         }
         cursor = GlobalDataBase.getDb().getUserData();
-        if(cursor.getCount() != 0){
-            cursor.moveToLast();
-            Log.v("user UD DNH", String.valueOf(cursor.getInt(7)));
+        while(cursor.moveToNext()){
             dailyNeedHydration = cursor.getInt(7);
         }
 
         //Check if is new day
         Calendar calendar = Calendar.getInstance();
         if( calendar.get(Calendar.DAY_OF_YEAR) != dayInYear){
+            cursor = GlobalDataBase.getDb().getDailyData();
             if(cursor.getCount()!=0){
                 GlobalDataBase.getDb().insert_Hydration((int)dailyHydration, (int)dailyNeedHydration);
                 dailyHydration = 0;
@@ -105,19 +99,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         hydrationBar = findViewById(R.id.HydrationBar);
         hydrationBar.setScaleY(3f);
         hydrationBar.getProgressDrawable().setColorFilter(Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
-        if(cursor.getCount() == 0) {
-            hydrationBar.setProgress(0);
-            cursor = GlobalDataBase.getDb().getHydration();
-            if(cursor.getCount() != 0){
-                cursor.moveToLast();
-                dailyNeedHydration = cursor.getInt(3);
-            }
-        }
-        else {
-            hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100));
-        }
-
-        Log.v("user DH", String.valueOf(dailyNeedHydration));
+        hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100));
 
         //Rozwijanie/zwijanie menu
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -129,14 +111,9 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setNavigationItemSelectedListener(this);
 
         //Wyswietlenie listy wypitych napojow
-        listView = (ListView) findViewById(R.id.status_ListView);
+        listView = findViewById(R.id.status_ListView);
         StatusListView statusListView = new StatusListView(this,drinks,desc,img);
         listView.setAdapter(statusListView);
-
-        //Wyswietlanie porad
-        /*ArrayAdapter<String> porady_adapter = new ArrayAdapter<String>(this, R.layout.items, R.id.tip ,Tips.advice);
-        ListView listView2 = findViewById(R.id.tips_ListView);
-        listView2.setAdapter(porady_adapter);*/
 
         //Wyswietlanie daty na gorze ekranu
         TextView date1;
@@ -151,16 +128,16 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
-                View view1 = getLayoutInflater().inflate(R.layout.items3,null);
+                View view1 = getLayoutInflater().inflate(R.layout.add_water_dialog,null);
                 builder.setView(view1);
                 final AlertDialog dialog = builder.create();
                 dialog.show();
 
-                _200 = (Button) view1.findViewById(R.id.b200);
-                _250 = (Button) view1.findViewById(R.id.b250);
-                _500 = (Button) view1.findViewById(R.id.b500);
-                _1000 = (Button) view1.findViewById(R.id.b1000);
-                _1500 = (Button) view1.findViewById(R.id.b1500);
+                _200 = view1.findViewById(R.id.b200);
+                _250 = view1.findViewById(R.id.b250);
+                _500 = view1.findViewById(R.id.b500);
+                _1000 = view1.findViewById(R.id.b1000);
+                _1500 = view1.findViewById(R.id.b1500);
 
                 _200.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -258,7 +235,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -270,11 +247,9 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onPause() {
         super.onPause();
-        Log.v("user onPause","=== OnPause ===");
-        //Save daily data hydration to DB onPause
         cursor = GlobalDataBase.getDb().getDailyData();
         for (int i=cursor.getCount(); i< drinks.size(); i++ ){
-            globalDataBase.getDb().insert_Daily_Data((int)dailyHydration,drinks.get(i),desc.get(i),img.get(i),(int)dailyNeedHydration,lastWaterAdded.get(i));
+            globalDataBase.getDb().insert_Daily_Data((int)dailyHydration,drinks.get(i),desc.get(i),img.get(i),lastWaterAdded.get(i));
         }
         drinks.removeAll(drinks);
         desc.removeAll(desc);
@@ -285,12 +260,10 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
 
     @Override
     protected void onResume() {
-        Log.v("log user onResume","=== OnResume ===");
-        //Get daily data hydration from DB onResume
         super.onResume();
+        img.removeAll(img);
         drinks.removeAll(drinks);
         desc.removeAll(desc);
-        img.removeAll(img);
         lastWaterAdded.removeAll(lastWaterAdded);
         cursor = GlobalDataBase.getDb().getDailyData();
         while (cursor.moveToNext()){
@@ -298,21 +271,17 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
             drinks.add(cursor.getString(3));
             desc.add(cursor.getString(4));
             img.add(cursor.getInt(2));
-            lastWaterAdded.add(cursor.getInt(7));
-        }
-        if(cursor.getCount() == 0){
-            dailyHydration = 0;
+            lastWaterAdded.add(cursor.getInt(6));
         }
         cursor = GlobalDataBase.getDb().getUserData();
-        if(cursor.getCount() != 0){
-            cursor.moveToLast();
+        while (cursor.moveToNext()){
             dailyNeedHydration = cursor.getInt(7);
         }
 
         hydrationBar = findViewById(R.id.HydrationBar);
         hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100));
 
-        listView = (ListView) findViewById(R.id.status_ListView);
+        listView = findViewById(R.id.status_ListView);
         StatusListView statusListView = new StatusListView(this,drinks,desc,img);
         listView.setAdapter(statusListView);
     }
@@ -320,11 +289,9 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v("log user onDestroy","=== OnDestroy ====");
-        //Save daily data hydration to DB onDestroy
         cursor = GlobalDataBase.getDb().getDailyData();
         for (int i=cursor.getCount(); i< drinks.size(); i++ ){
-            globalDataBase.getDb().insert_Daily_Data((int)dailyHydration,drinks.get(i),desc.get(i),img.get(i), (int) dailyNeedHydration,lastWaterAdded.get(i));
+            globalDataBase.getDb().insert_Daily_Data((int)dailyHydration,drinks.get(i),desc.get(i),img.get(i),lastWaterAdded.get(i));
         }
         drinks.removeAll(drinks);
         desc.removeAll(desc);
@@ -349,7 +316,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
             intent = new Intent(this, AlarmReceivier.class);
             pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3000 , pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 6000 , pendingIntent);
             is_notification_on = true;
         }
         //Notyfications off
@@ -380,16 +347,10 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
             Intent intent = new Intent(MainPage.this,Statistics.class);
             startActivity(intent);
         }
-        else if (id == R.id.calendar)
+        else if (id == R.id.historia)
         {
-            Intent intent = new Intent(MainPage.this,MyCalendar.class);
+            Intent intent = new Intent(MainPage.this,History.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_share)
-        {
-        }
-        else if (id == R.id.nav_send)
-        {
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -1,7 +1,6 @@
 package com.example.projekt.woda;
 
 
-import android.accessibilityservice.GestureDescription;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,7 +22,7 @@ public class StatusListView extends ArrayAdapter<String>{
     private ArrayList<Integer> img;
 
     public StatusListView(Activity context, ArrayList<String> drinks, ArrayList<String> desc, ArrayList<Integer> img) {
-        super(context, R.layout.items2, drinks);
+        super(context, R.layout.daily_data_layoyt, drinks);
         this.drinks = drinks;
         this.desc = desc;
         this.img = img;
@@ -38,7 +37,7 @@ public class StatusListView extends ArrayAdapter<String>{
         if(r==null){
 
             LayoutInflater layoutInflater = context.getLayoutInflater();
-            r = layoutInflater.inflate(R.layout.items2,null,true);
+            r = layoutInflater.inflate(R.layout.daily_data_layoyt,null,true);
             viewHolder = new ViewHolder(r);
             r.setTag(viewHolder);
         }

@@ -3,31 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/date"
-            android:icon="@android:drawable/ic_menu_edit"
-            android:title="Twoje dane" />
-        <item
-            android:id="@+id/statistic"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
-            android:title="Statystyki" />
-        <item
-            android:id="@+id/calendar"
-            android:icon="@android:drawable/ic_menu_today"
-            android:title="Kalendarz" />
-    </group>
-
-    <item android:title="Communicate">
+    <item android:title="Dane użytkownika">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/date"
+                android:icon="@android:drawable/ic_menu_edit"
+                android:title="Twoje dane" />
+        </menu>
+    </item>
+
+    <item android:title="Statystyki">
+        <menu>
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/statistic"
+                android:icon="@android:drawable/ic_menu_sort_by_size"
+                android:title="Statystyki" />
+        </menu>
+    </item>
+
+    <item android:title="Historia">
+        <menu>
+            <item
+                android:id="@+id/historia"
+                android:icon="@android:drawable/ic_menu_recent_history"
+                android:title="Historia" />
         </menu>
     </item>
 
