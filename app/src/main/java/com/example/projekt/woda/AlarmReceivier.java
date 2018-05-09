@@ -37,8 +37,8 @@ public class AlarmReceivier extends BroadcastReceiver {
         notyfication1.setTicker("Ticker");
         calendar.add(Calendar.SECOND,5);
         notyfication1.setWhen(calendar.getTimeInMillis());
-        notyfication1.setContentTitle("Content Title");
-        notyfication1.setContentText("Content Text");
+        notyfication1.setContentTitle("Przypomnienie");
+        notyfication1.setContentText("Pamiętaj o wypiciu wody!");
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(1, notyfication1.build());

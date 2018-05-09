@@ -46,6 +46,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     Cursor cursor;
     ListView listView;
     ProgressBar hydrationBar;
+    TextView textView;
 
     Button _200;
     Button _250;
@@ -69,6 +70,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
 
         dailyHydration = 0;
 
+
         //Get daily data hydration get drom DB
         cursor = GlobalDataBase.getDb().getDailyData();
         while (cursor.moveToNext()){
@@ -83,6 +85,10 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         while(cursor.moveToNext()){
             dailyNeedHydration = cursor.getInt(7);
         }
+
+        //Wyswietlanie wyliczonej ilosci wody
+        textView=findViewById(R.id.textView5);
+        textView.setText(dailyHydration + " / " + dailyNeedHydration);
 
         //Check if is new day
         Calendar calendar = Calendar.getInstance();
@@ -104,7 +110,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         //Rozwijanie/zwijanie menu
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                      this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -121,6 +127,8 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
         Date date = new Date();
         date1.setText(dateFormat.format(date));
+
+
 
         //Dodawanie nowego napoju
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -151,6 +159,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         listView.invalidateViews();
                         dialog.dismiss();
                         lastWaterAdded.add(200);
+                        textView.setText(dailyHydration + " / " + dailyNeedHydration);
 
                     }
                 });
@@ -166,6 +175,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         lastWaterAdded.add(250);
                         listView.invalidateViews();
                         dialog.dismiss();
+                        textView.setText(dailyHydration + " / " + dailyNeedHydration);
                     }
                 });
                 _500.setOnClickListener(new View.OnClickListener(){
@@ -180,6 +190,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         listView.invalidateViews();
                         dialog.dismiss();
                         lastWaterAdded.add(500);
+                        textView.setText(dailyHydration + " / " + dailyNeedHydration);
                     }
                 });
                 _1000.setOnClickListener(new View.OnClickListener(){
@@ -194,6 +205,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         listView.invalidateViews();
                         dialog.dismiss();
                         lastWaterAdded.add(1000);
+                        textView.setText(dailyHydration + " / " + dailyNeedHydration);
                     }
                 });
                 _1500.setOnClickListener(new View.OnClickListener(){
@@ -208,6 +220,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                         hydrationBar.setProgress((int) percent);
                         listView.invalidateViews();
                         dialog.dismiss();
+                        textView.setText(dailyHydration + " / " + dailyNeedHydration);
                     }
                 });
             }
@@ -228,6 +241,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
                     hydrationBar.setProgress((int)((dailyHydration/dailyNeedHydration)*100));
                     listView.invalidateViews();
                     GlobalDataBase.getDb().deleteLastDailyData();
+                    textView.setText(dailyHydration + " / " + dailyNeedHydration);
                 }
             }
         });
@@ -256,6 +270,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         img.removeAll(img);
         lastWaterAdded.removeAll(lastWaterAdded);
         dailyHydration = 0;
+        textView.setText(dailyHydration + " / " + dailyNeedHydration);
     }
 
     @Override
@@ -284,6 +299,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         listView = findViewById(R.id.status_ListView);
         StatusListView statusListView = new StatusListView(this,drinks,desc,img);
         listView.setAdapter(statusListView);
+        textView.setText(dailyHydration + " / " + dailyNeedHydration);
     }
 
     @Override
@@ -298,6 +314,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         img.removeAll(img);
         lastWaterAdded.removeAll(lastWaterAdded);
         dailyHydration = 0;
+        textView.setText(dailyHydration + " / " + dailyNeedHydration);
     }
 
     @Override
@@ -315,8 +332,10 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         if (id == R.id.notifications) {
             intent = new Intent(this, AlarmReceivier.class);
             pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
             alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 6000 , pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*30 , pendingIntent);
             is_notification_on = true;
         }
         //Notyfications off

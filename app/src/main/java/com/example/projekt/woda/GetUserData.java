@@ -53,7 +53,6 @@ public class GetUserData extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
-
         spinner_activity = findViewById(R.id.activity_choice);
         adapter_activity = ArrayAdapter.createFromResource(this,R.array.activity_list, android.R.layout.simple_spinner_item);
         adapter_activity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -91,10 +90,10 @@ public class GetUserData extends AppCompatActivity {
                 }
                 User.setIf_pregnant(box.isChecked());
                 User.setIf_nursing(box2.isChecked());
-                if(activity_choice=="Średni"){
+                if(activity_choice=="Średnia"){
                     User.setActivity("S");
                 }
-                else {
+                else if (activity_choice=="Wysoka"){
                     User.setActivity("W");
                 }
                 Hydration.setHyd();
