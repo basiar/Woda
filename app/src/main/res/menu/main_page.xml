@@ -5,11 +5,13 @@
     <item
         android:id="@+id/notifications_off"
         android:title="Wyłącz powiadomienia"
+        android:background="@drawable/border"
         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
-        tools:icon="@drawable/mr_button_light" />
+        tools:icon="@drawable/mr_button_light"/>
     <item
         android:id="@+id/notifications"
         android:orderInCategory="100"
+        android:background="@drawable/border"
         android:title="Włącz powiadomienia"
         app:showAsAction="never" />
 </menu>
