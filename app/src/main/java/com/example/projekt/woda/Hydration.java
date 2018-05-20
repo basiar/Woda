@@ -79,13 +79,11 @@ public class Hydration extends Application
                 hyd=1500+15*(User.getWeight()-20);
             }
 
-            //wliczone juz nawodnienie w trakcie treningu przed i po
-            //dla aktywnosci sredniej
             if(User.getActivity()=="S")
             {
                 hyd=hyd+15*User.getWeight();
             }
-            //dla aktywnosci wysokiej
+
             else if(User.getActivity()=="W")
             {
                 hyd=hyd+20*User.getWeight();

@@ -40,8 +40,8 @@ public class Statistics extends AppCompatActivity
         graph.getViewport().setScalable(true);
         graph.getViewport().setScalableY(true);
 
-        series = new LineGraphSeries<DataPoint>();
-        series2 = new PointsGraphSeries<DataPoint>();
+        series = new LineGraphSeries<>();
+        series2 = new PointsGraphSeries<>();
 
         cursor = GlobalDataBase.getDb().getWeightData();
         while (cursor.moveToNext()){
@@ -52,7 +52,6 @@ public class Statistics extends AppCompatActivity
         graph.addSeries(series2);
         graph.addSeries(series);
 
-;
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {

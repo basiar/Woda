@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by Basia on 24.03.2018.
  */
 
-//do udostepnienia obslugi bazy danych wszystkim activities
+
 public class GlobalDataBase extends Application
 {
     private static DataBase db;

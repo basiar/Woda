@@ -10,24 +10,21 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class History extends AppCompatActivity {
 
-    TextView textView;
-    TextView textView2;
+    TextView textView, textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
+        setContentView(R.layout.activity_history);
 
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
         Calendar calendar = Calendar.getInstance();
 
-        // Wyświetlanie tabeli 1
-      /*  Cursor cursor = GlobalDataBase.getDb().getUserData();
+      /*Cursor cursor = GlobalDataBase.getDb().getUserData();
         StringBuffer stringBuffer = new StringBuffer();
         while (cursor.moveToNext()){
             stringBuffer.append("ID: "+cursor.getString(0)+"\n");
@@ -40,7 +37,6 @@ public class History extends AppCompatActivity {
             stringBuffer.append("--------------------------------------\n");
         }*/
 
-        // Wyświetlanie tabeli 2
         Cursor cursor = GlobalDataBase.getDb().getHydration();
         StringBuffer stringBuffer2 = new StringBuffer();
         while (cursor.moveToNext()){
@@ -52,7 +48,6 @@ public class History extends AppCompatActivity {
             stringBuffer2.append("--------------------------------------\n");
         }
 
-        // Wyświetlanie tabeli 3
        /* Cursor cursor = GlobalDataBase.getDb().getWeightData();
         StringBuffer stringBuffer = new StringBuffer();
         while(cursor.moveToNext()){
@@ -61,7 +56,6 @@ public class History extends AppCompatActivity {
             stringBuffer.append("Weight: "+cursor.getString(2)+"\n");
         }*/
 
-        // Wyświetlanie tabeli 4
         cursor = GlobalDataBase.getDb().getDailyData();
         StringBuffer stringBuffer = new StringBuffer();
         while(cursor.moveToNext()){

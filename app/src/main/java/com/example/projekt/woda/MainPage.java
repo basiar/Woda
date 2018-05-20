@@ -33,26 +33,21 @@ import java.util.Calendar;
 public class MainPage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     GlobalDataBase globalDataBase = new GlobalDataBase(this);
-    static double dailyHydration;
-    static double dailyNeedHydration;
-    static double percent;
+
+    static double dailyHydration, dailyNeedHydration, percent;
     private int dayInYear;
 
-    ArrayList<String> drinks = new ArrayList<String>();
-    ArrayList<String> desc = new ArrayList<String>();
-    ArrayList<Integer> img = new ArrayList<Integer>();
-    ArrayList<Integer> lastWaterAdded = new ArrayList<Integer>();
+    ArrayList<String> drinks = new ArrayList<>();
+    ArrayList<String> desc = new ArrayList<>();
+    ArrayList<Integer> img = new ArrayList<>();
+    ArrayList<Integer> lastWaterAdded = new ArrayList<>();
 
     Cursor cursor;
     ListView listView;
     ProgressBar hydrationBar;
     TextView textView;
 
-    Button _200;
-    Button _250;
-    Button _500;
-    Button _1000;
-    Button _1500;
+    Button _200,_250,_500,_1000,_1500;
 
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
@@ -62,14 +57,12 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.v("user onCreate","OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         dailyHydration = 0;
-
 
         //Get daily data hydration get drom DB
         cursor = GlobalDataBase.getDb().getDailyData();
@@ -87,7 +80,7 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         }
 
         //Wyswietlanie wyliczonej ilosci wody
-        textView=findViewById(R.id.textView5);
+        textView = findViewById(R.id.textView5);
         textView.setText(dailyHydration + " / " + dailyNeedHydration);
 
         //Check if is new day
@@ -127,8 +120,6 @@ public class MainPage extends AppCompatActivity implements NavigationView.OnNavi
         DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM");
         Date date = new Date();
         date1.setText(dateFormat.format(date));
-
-
 
         //Dodawanie nowego napoju
         FloatingActionButton fab = findViewById(R.id.fab);

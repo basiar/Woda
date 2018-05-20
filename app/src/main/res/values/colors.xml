@@ -6,4 +6,5 @@
     <color name="kolor_zielony">#24c924</color>
     <color name="colorLightGrey">#f5f5f5</color>
     <color name="colorDarkGrey">#555E66</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

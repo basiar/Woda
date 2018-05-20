@@ -17,17 +17,12 @@ import android.widget.Toast;
 
 public class GetUserData extends AppCompatActivity {
 
-    Spinner spinner_gender;
-    ArrayAdapter<CharSequence> adapter_gender;
-    String gender_choice;
-    Spinner spinner_activity;
-    ArrayAdapter<CharSequence> adapter_activity;
-    String activity_choice;
-    EditText age_field;
-    EditText weight_field;
-    Button ok;
-    CheckBox box;
-    CheckBox box2;
+    Spinner spinner_gender, spinner_activity;
+    ArrayAdapter<CharSequence> adapter_gender, adapter_activity;;
+    String gender_choice, activity_choice;
+    EditText age_field, weight_field;
+    Button save;
+    CheckBox box, box2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +35,7 @@ public class GetUserData extends AppCompatActivity {
         weight_field.setText(String.valueOf(User.getWeight()));
         box = findViewById(R.id.is_pregnant);
         box2 = findViewById(R.id.is_nursing);
+
         spinner_gender = findViewById(R.id.gender_choice);
         adapter_gender = ArrayAdapter.createFromResource(this,R.array.gender_list, android.R.layout.simple_spinner_item);
         adapter_gender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -74,8 +70,8 @@ public class GetUserData extends AppCompatActivity {
             weight_field.setText(String.valueOf(cursor.getInt(2)));
         }
 
-        ok = findViewById(R.id.ok);
-        ok.setOnClickListener(new View.OnClickListener() {
+        save = findViewById(R.id.save);
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 User.setAge(Integer.parseInt(age_field.getText().toString()));

@@ -4,9 +4,6 @@ import android.app.Application;
 
 import java.io.Serializable;
 
-//dziedziczy po Application bo wtedy wszystkie Activities maja dostep do tych danych
-//bez potrzeby przekazywania za kazdym razem
-//zmienic public na private jak sie ogarnie pozostale
 public class User extends Application implements Serializable {
 
     private static String gender = "M";
@@ -16,7 +13,6 @@ public class User extends Application implements Serializable {
     private static boolean if_nursing = false;
     private static String activity = "S";
 
-    //getery
     public static int getAge()
     {
         return age;
@@ -41,7 +37,6 @@ public class User extends Application implements Serializable {
         return activity;
     }
 
-    //setery
     public static void setAge(int age)
     {
         User.age = age;

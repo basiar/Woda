@@ -55,11 +55,10 @@ public class StatusListView extends ArrayAdapter<String>{
         TextView drink;
         TextView status1;
         ImageView imageView;
-        ProgressBar progressBar;
         ViewHolder(View v){
-            drink = (TextView) v.findViewById(R.id.drink);
-            status1 = (TextView) v.findViewById(R.id.status1);
-            imageView = (ImageView) v.findViewById(R.id.imageView2);
+            drink = v.findViewById(R.id.drink);
+            status1 = v.findViewById(R.id.status1);
+            imageView = v.findViewById(R.id.imageView2);
         }
     }
 
